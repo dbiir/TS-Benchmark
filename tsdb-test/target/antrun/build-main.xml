@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <copy todir="/home/rainmaple/opt/codeFiles/V2/tsdb-test/lib">
+    <fileset dir="/home/rainmaple/opt/codeFiles/V2/tsdb-test/target/">
+      <include name="*.jar"/>
+    </fileset>
+  </copy>
+</target>
+</project>

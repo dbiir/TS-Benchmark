@@ -1,0 +1,49 @@
+{
+  "type" : "index",
+  "spec" : {
+ "dataSchema" : {
+      "dataSource" : "druidTest",
+      "parser" : {
+        "type" : "string",
+        "parseSpec" : {
+          "format" : "json",
+          "dimensionsSpec" : {
+            "dimensions" : [
+              "f",
+              "d",
+              "s",
+              { "name": "value", "type": "double" }
+            ]
+          },
+          "timestampSpec": {
+            "column": "timestamp",
+            "format": "iso"
+          }
+        }
+      },
+      "metricsSpec" : [],
+      "granularitySpec" : {
+        "type" : "uniform",
+        "segmentGranularity" : "day",
+        "queryGranularity" : "none",
+        "intervals" : ["2018-01-01/2018-01-07"],
+        "rollup" : false
+      }
+    },
+    "ioConfig" : {
+      "type" : "index",
+      "firehose" : {
+        "type" : "local",
+        "baseDir" : "/home/rainmaple/opt/codeFiles/V2/tsdb-test/data/load",
+        "filter" : "load_druid_json.txt"
+      },
+      "appendToExisting" : false
+    },
+    "tuningConfig" : {
+      "type" : "index",
+      "targetPartitionSize" : 5000000,
+      "maxRowsInMemory" : 25000,
+      "forceExtendableShardSpecs" : true
+    }
+  }
+}
