@@ -1,12 +1,12 @@
 package cn.edu.ruc.adapter;
 
 /**
+ * modified by rainmaple
  * 适配器基础类
  */
 public interface BaseAdapter {
     public void initConnect(String ip, String port, String user, String password);
     /**
-     *
      * @return timeout ,if request failed, please return -1;
      */
     public long insertData(String data);
