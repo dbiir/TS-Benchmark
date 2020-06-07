@@ -3,10 +3,9 @@ package cn.edu.ruc;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-public class DuidUtils {
+public class DruidUtils {
 
-	public void transformFile(String fName) throws IOException {
-		//String fname="/home/tsbm/tsbm_app/benchmark/mini-tsdb-test/tsdb-test/data/load/load.data";     
+	public void transformFile(String fName) throws IOException {  
 		fName +="load.data";
 		FileReader fr=new FileReader(fName);
 		BufferedReader br=new BufferedReader(fr);
@@ -43,7 +42,7 @@ public class DuidUtils {
 		fr.close();
 	}
 	public static void main(String[] args) throws IOException {
-		String filenName=args[0];		
+		String fileName=args[0];		
 		DuidUtils du=new DuidUtils();
 		du.transformFile(fileName);
 	}
