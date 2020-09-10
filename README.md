@@ -1,6 +1,6 @@
 # TS-Benchmark
 
-#### Description:
+#### Description
 
 This project is the source code of TS-Benchmark.
 
@@ -40,4 +40,4 @@ The configuration of TSDBs is shown as follows:
 
 - OpenTSDB. The parameter ```tsd-http-request-enable-chunked`` is enabled, ``tsd-http-request-max-chunk`` is set as 32KB, ``tsd-core-auto-create-metrics`` is set as true, and the parameter ``tsd-storage-enable-compaction`` is set to be false to improve the write performance.
 
-more information please ref to [for detail](./documents/时序评测工具使用手册.pdf)
+More information please ref to [for detail](./documents/时序评测工具使用手册.pdf)
