@@ -14,10 +14,6 @@ import torch.nn.functional as F
 import os
 import cv2
 
-
-
-
-
 class D_Net(nn.Module):
     def __init__(self,bais=False):
         super(D_Net,self).__init__()
@@ -37,16 +33,14 @@ class D_Net(nn.Module):
             nn.Conv2d(512,1024, 4,2,2,bias=bais),
             nn.BatchNorm2d(1024),
             nn.LeakyReLU(0.2,True),#4
-
             nn.Conv2d(1024,1,4, 1,bias=bais),
-
             )
-
 
     def forward(self, x):
         y =self.dnet1(x)
         out=self.dnet2(y)
         return y,out
+
 class G_Net(nn.Module):
     def __init__(self):
         super(G_Net, self).__init__()
@@ -110,7 +104,6 @@ if __name__ == '__main__':
     #     out = out.clamp(0, 1)#Clamp函数可以将随机变化的数值
     #     # 限制在一个给定的区间[min, max]内,[0,1]
     #     return out
-    #
     #
     date=np.loadtxt('./column_23_3072_3072.txt',delimiter=',')
     lis=[]

@@ -15,8 +15,6 @@ import torch.nn.functional as F
 import os
 #import cv2
 
-
-
 class D_Net(nn.Module):
     def __init__(self,bais=False):
         super(D_Net,self).__init__()
@@ -38,9 +36,7 @@ class D_Net(nn.Module):
             nn.LeakyReLU(0.2,True),#4
 
             nn.Conv2d(1024,1,4, 1,bias=bais),
-
             )
-
 
     def forward(self, x):
         y =self.dnet1(x)
@@ -117,10 +113,10 @@ class encoder(nn.Module):
             nn.BatchNorm2d(128),#1
 )
 
-
     def forward(self, x):
         y =self.en(x)
         return y
+
 if __name__ == '__main__':
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -140,12 +136,6 @@ if __name__ == '__main__':
 
     print(len(lis))
 
-
-
-
-
-
-
     dataloader = DataLoader(lis, batch_size=batch_size,
                         shuffle=False,num_workers=2,drop_last=True)
 
@@ -154,7 +144,7 @@ if __name__ == '__main__':
     g_net.load_state_dict(
                     torch.load(r"./gang_path"))
     encoder_.load_state_dict(torch.load(r'./ganen_path'))
-    print('成功')
+    print('success')
     seq=[]
 
     for i, img in enumerate(dataloader):
@@ -163,11 +153,8 @@ if __name__ == '__main__':
                     # for p in d_net.parameters(): p.data.clamp_(-0.01, 0.01)
                     # img = img/10
                     real_img = img.float().to(device)
-
                     # z = torch.randn(batch_size, 128, 1, 1).to(device)
                     # fake_img = g_net(z)
-
-                    #
                     sap = encoder_(real_img)
                     fake_img = g_net(sap)
                     fake_mg=fake_img.view(-1)
@@ -200,7 +187,6 @@ if __name__ == '__main__':
                     # #plt.pause(10)
                     # print(i)
                     # plt.clf()
-
     seq=np.asarray(seq).reshape(len(seq), 3072)
     np.savetxt("fake_noise_23_raw_f.txt", seq, fmt='%f',delimiter=',')
 

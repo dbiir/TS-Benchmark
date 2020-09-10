@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# pay attention to the params below and set refer to the notes
 # 计算当前目录
 BENCHMARK_HOME="$(cd "`dirname "$0"`"/.; pwd)"
 echo $BENCHMARK_HOME

@@ -2,6 +2,7 @@ package cn.edu.ruc.adapter;
 
 /**
  * modified by rainmaple
+ * adapter base interface
  * 适配器基础类
  */
 public interface BaseAdapter {
@@ -21,7 +22,6 @@ public interface BaseAdapter {
     public long query1(long start, long end);
     /**
      * the method query2
-     *
      * select time,s_id,d_id,f_id from table where f_id=f and s_id=s and value>X and time>start and time<end (1 week)
      * select * from table where f_id=f and d_id=d_id and s_id=s_id and time>time-15min and time <time+15min
      * TODO 第二条本质和第一条负载的一直，是否去掉？

@@ -15,8 +15,6 @@ import os
 import cv2
 
 
-
-
 class D_Net(nn.Module):
     def __init__(self,bais=False):
         super(D_Net,self).__init__()
@@ -36,11 +34,8 @@ class D_Net(nn.Module):
             nn.Conv2d(512,1024, 4,2,2,bias=bais),
             nn.BatchNorm2d(1024),
             nn.LeakyReLU(0.2,True),#4
-
             nn.Conv2d(1024,1,4, 1,bias=bais),
-
             )
-
 
     def forward(self, x):
         y =self.dnet1(x)
@@ -117,10 +112,10 @@ class encoder(nn.Module):
             nn.BatchNorm2d(128),#1
 )
 
-
     def forward(self, x):
         y =self.en(x)
         return y
+
 if __name__ == '__main__':
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -136,7 +131,6 @@ if __name__ == '__main__':
     optimizer = torch.optim.Adam(
         encoder_.parameters(), lr=0.0001)
     batch_size=128
-
     # def to_img(x):
     #     out = 0.5 * (x + 1)#[(-1,1)+1=(0,2),(0,2)*0.5=(0,1)],
     #     out = out.clamp(0, 1)#Clamp函数可以将随机变化的数值
@@ -160,9 +154,10 @@ if __name__ == '__main__':
                 torch.load(r"./gang_path"))
     try:
         encoder_.load_state_dict(torch.load(r'E:\Project\GAN-abnormal detection\ME_DCGAN_Cartoon\ganen_path'))
-        print('成功')
+        print('success')
     except:
-        print('不成功')
+        print('falied')
+
     for epoch in range(6000):
             for i, img in enumerate(dataloader):
                 for p in d_net.parameters(): p.data.clamp_(-0.01, 0.01)
