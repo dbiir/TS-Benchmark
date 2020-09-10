@@ -1,26 +1,35 @@
 # TS-Benchmark
 
 #### Description:
+
 This project is the source code of TS-Benchmark.
+
+#### Start
 
 The general steps to complete the test are:
 
-- 1. Data generation ``cd data_generation``
-Train DCGAN model, ``python DCGAN.py``
+1. Data generation 
+
+``cd data_generation``
+
+Train DCGAN model
+
+ ``python DCGAN.py``
+
 Run the ``encoder_dc.py`` file to train the encoder, ``python encoder_dc.py``
 Finally execute the test ``python test_dc.py``
 
-- 2. Data Import 
+2. Data Import 
 
-Since each database have different build-in tools for data import, we have defined some tools related to data import in the tsdb-test/data/load directory
+Since each database have different build-in tools for data import, we have defined some tools related to data import in the ``tsdb-test/data/load directory``
 
-- 3. build project
+3. build project
 
 ``cd Tsdb-benchmark/ts-benchmark/``
 
 ``sh build.sh``
 
-- 4. config parametes of database and run the benchmark
+4. config parametes of database and run the benchmark
 
 ``cd Tsdb-benchmark/ts-benchmark/``
 
@@ -28,7 +37,7 @@ Since each database have different build-in tools for data import, we have defin
 
 ``sh run.sh``
 
-#### params description
+#### Params description
 
 The configuration of TSDBs is shown as follows:
 
