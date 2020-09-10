@@ -17,7 +17,7 @@ Run the ``encoder_dc.py`` file to train the encoder, ``python encoder_dc.py``
 Finally execute the test ``python test_dc.py``
 
 2. Data Import 
-Since each database have different build-in tools for data import, we have defined some tools related to data import in the ``tsdb-test/data/load directory``
+Since each database have different build-in tools for data import, we have defined some tools related to data import in the ``tsdb-test/data/load``  directory
 
 3. build project
 ``cd Tsdb-benchmark/ts-benchmark/``
