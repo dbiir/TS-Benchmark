@@ -38,6 +38,6 @@ The configuration of TSDBs is shown as follows:
 
 - Druid. The parameter ``Roll-up`` is set as true, and ``Granu-larity`` is set as hour. For local batch import, the parameter maxRowsPerSegment is set as 10M, maxRowsInMemory is set as 20M, and maxTotalRows is set as 100M. 
 
-- OpenTSDB. The parameter ```tsd-http-request-enable-chunked`` is enabled, ``tsd-http-request-max-chunk`` is set as 32KB, ``tsd-core-auto-create-metrics`` is set as true, and the parameter ``tsd-storage-enable-compaction`` is set to be false to improve the write performance.
+- OpenTSDB. The parameter ``tsd-http-request-enable-chunked`` is enabled, ``tsd-http-request-max-chunk`` is set as 32KB, ``tsd-core-auto-create-metrics`` is set as true, and the parameter ``tsd-storage-enable-compaction`` is set to be false to improve the write performance.
 
 More information please ref to [for detail](./documents/时序评测工具使用手册.pdf)
