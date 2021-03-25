@@ -1,4 +1,4 @@
-##Data Generate
+## Data Generate
 
 #### Introduction
 
@@ -12,10 +12,13 @@ Creating seed fragments (sequences) based on real-time sequence data usually lim
 #### Start
 
 1. first run DCGAN.py file，to train DCGAN model
+
 ``python DCGAN.py``
 
 2. then run the ``encoder_dc.py`` file, to train the encoder model
+
 ``python encoder_dc.py```
 
-3、execute benchmark 
+3. execute benchmark 
+
 ``python test_dc.py``
