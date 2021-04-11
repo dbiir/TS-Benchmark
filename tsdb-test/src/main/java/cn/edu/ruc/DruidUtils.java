@@ -43,7 +43,7 @@ public class DruidUtils {
 	}
 	public static void main(String[] args) throws IOException {
 		String fileName=args[0];		
-		DuidUtils du=new DuidUtils();
+		DruidUtils du=new DruidUtils();
 		du.transformFile(fileName);
 	}
 }
