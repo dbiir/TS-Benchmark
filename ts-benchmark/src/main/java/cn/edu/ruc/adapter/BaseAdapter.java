@@ -24,7 +24,6 @@ public interface BaseAdapter {
      * the method query2
      * select time,s_id,d_id,f_id from table where f_id=f and s_id=s and value>X and time>start and time<end (1 week)
      * select * from table where f_id=f and d_id=d_id and s_id=s_id and time>time-15min and time <time+15min
-     * TODO 第二条本质和第一条负载的一直，是否去掉？
      * @param start query data  start time
      * @param end query data end time
      * @return

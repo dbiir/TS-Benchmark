@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.concurrent.*;
 
 /**
- * 入口类
+ * 入口类 BootStrap
  */
 public class TSBM {
     public static final String SEPARATOR = ",";
@@ -76,14 +76,11 @@ public class TSBM {
             System.out.println(">>>>>>>>>>generate data begin " + System.currentTimeMillis() + ">>>>>>>>>>");
             generateDiskData(dataPath, maxFarm, maxRows);
             System.out.println("<<<<<<<<<<generate data finished " + System.currentTimeMillis() + "<<<<<<<");
-        }else{
-
+        } else {
             System.out.println(">>>>>>>>>>generate insert data begin " + System.currentTimeMillis() + ">>>>>>>>>>");
 //            generateInsertData(dataPath, maxFarm, maxRows);
             System.out.println("<<<<<<<<<<generate insert data finished " + System.currentTimeMillis() + "<<<<<<<");
         }
-
-
 
         // 2 导入
         if (loadParam) {
@@ -124,8 +121,7 @@ public class TSBM {
         generateDiskData(dataPath, MAX_FARM, MAX_ROWS);
         System.out.println("<<<<<<<<<<generate data finished " + System.currentTimeMillis() + "<<<<<<<");
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////数据生成
+///////////////////////////////////////////////////数据生成
 
     /**
      * 生成磁盘数据
@@ -142,8 +138,8 @@ public class TSBM {
         for (long start = importStart; start <= importEnd; start += 70000) {
             String path = basePath + "/load/load.data";
             long end = importEnd < start + 70000 ? importEnd : start + 70000;
-            int sumFarm=SUM_FARM;// 历史数据风场数
-            for(int farmId=1;farmId<=sumFarm;farmId++){
+            int sumFarm = SUM_FARM;// 历史数据风场数
+            for (int farmId = 1; farmId <= sumFarm; farmId++) {
                 FileUtils.writeLine(path, generateData(start, end, farmId, 50));
 //                FileUtils.writeLine(path, generateData(start, end, farmId, 50));
             }
@@ -198,7 +194,7 @@ public class TSBM {
                 for (int sn = 1; sn <= sumSensor; sn++) {
                     dBuffer.append(SEPARATOR);
 //                    dBuffer.append(String.format("%.5f", RANDOM.nextDouble() * sn));
-                    dBuffer.append(String.format("%.5f", ValueUtils.getValueByField((int)farmId,sn,start)));
+                    dBuffer.append(String.format("%.5f", ValueUtils.getValueByField((int) farmId, sn, start)));
                 }
                 dBuffer.append(LINE_SEPARATOR);
                 dataBuffer.append(dBuffer.toString());
@@ -208,8 +204,9 @@ public class TSBM {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////数据导入
-    //
+    //////////////////////数据导入////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private static String importData(BaseAdapter adapter, String dataPath) {
         String path = dataPath + "/load/load.data";
         int cacheLine = 3000;
@@ -250,8 +247,8 @@ public class TSBM {
     }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////写入测试
-
+//////////////////////写入测试/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * append test
      */
@@ -271,24 +268,24 @@ public class TSBM {
             CompletionService<Long> cs = new ExecutorCompletionService<Long>(pool);
             long sumPps = 0L;
             //每个风场，每个7s发送一次数据
-            Map<Integer,Integer> thinkTimeMap=new HashMap<Integer,Integer>();
+            Map<Integer, Integer> thinkTimeMap = new HashMap<Integer, Integer>();
             for (int cFarm = 1; cFarm <= farm; cFarm++) {
                 int thinkTime = RANDOM.nextInt(sleepTime);
-                thinkTimeMap.put(cFarm,thinkTime);
+                thinkTimeMap.put(cFarm, thinkTime);
             }
             for (int batch = 1; batch <= batchMax; batch++) {
                 long startTime = System.currentTimeMillis();
                 for (int cFarm = 1; cFarm <= farm; cFarm++) {
                     String path = basePath + "/farm/" + farm + "/" + batch + "/" + cFarm;
-                    executeAppend(adapter, cs, path,thinkTimeMap.get(cFarm));
+                    executeAppend(adapter, cs, path, thinkTimeMap.get(cFarm));
                 }
                 long pps = calcThroughtPut(row, farm, cs);
                 sumPps += pps;
                 System.out.println("append 1." + farm + "." + batch + " finished " + pps);
                 long endTime = System.currentTimeMillis();
-                long costTime=endTime-startTime;
+                long costTime = endTime - startTime;
                 // 每七秒执行一次
-                sleep(sleepTime-costTime>0?sleepTime-costTime:1);
+                sleep(sleepTime - costTime > 0 ? sleepTime - costTime : 1);
             }
             appendResultBuffer.append("farm");
             appendResultBuffer.append("\t");
@@ -310,24 +307,24 @@ public class TSBM {
             CompletionService<Long> cs = new ExecutorCompletionService<Long>(pool);
             long sumPps = 0L;
             //每个风场，每个7s发送一次数据
-            Map<Integer,Integer> thinkTimeMap=new HashMap<Integer,Integer>();
+            Map<Integer, Integer> thinkTimeMap = new HashMap<Integer, Integer>();
             for (int cFarm = 1; cFarm <= farm; cFarm++) {
                 int thinkTime = RANDOM.nextInt(sleepTime);
-                thinkTimeMap.put(cFarm,thinkTime);
+                thinkTimeMap.put(cFarm, thinkTime);
             }
             for (int batch = 1; batch <= batchMax; batch++) {
                 long startTime = System.currentTimeMillis();
                 for (int cFarm = 1; cFarm <= farm; cFarm++) {
                     String path = basePath + "/device/" + row + "/" + batch + "/" + cFarm;
-                    executeAppend(adapter, cs, path,thinkTimeMap.get(cFarm));
+                    executeAppend(adapter, cs, path, thinkTimeMap.get(cFarm));
                 }
                 long pps = calcThroughtPut(row, farm, cs);
                 sumPps += pps;
                 System.out.println("append 2." + row + "." + batch + " finished " + pps);
                 long endTime = System.currentTimeMillis();
-                long costTime=endTime-startTime;
+                long costTime = endTime - startTime;
                 // 每七秒执行一次
-                sleep(sleepTime-costTime>0?sleepTime-costTime:1);
+                sleep(sleepTime - costTime > 0 ? sleepTime - costTime : 1);
             }
             appendResultBuffer.append("device");
             appendResultBuffer.append("\t");
@@ -377,7 +374,8 @@ public class TSBM {
             }
         });
     }
-    private static void executeAppend(BaseAdapter adapter, CompletionService<Long> cs, String path,final int sleepTime) {
+
+    private static void executeAppend(BaseAdapter adapter, CompletionService<Long> cs, String path, final int sleepTime) {
         cs.submit(new Callable<Long>() {
             @Override
             public Long call() throws Exception {
@@ -428,11 +426,10 @@ public class TSBM {
 
 
         // 五类查询，每类10个批次
-        // TODO
         long time = 1514736000000l;//2018-01-01 00:00:00
-//        long time = 1514822400000l;//test
+       //long time = 1514822400000l;//test
         //首先查询一次刷新数据
-        adapter.query1(time, time+100*3600*24);
+        adapter.query1(time, time + 100 * 3600 * 24);
         sleep(SLEEP_TIME);
         System.out.println(">>>>>>>>>>query-1 end " + System.currentTimeMillis() + ">>>>>>>>>>");
         // 每一批次比前一批次时间维度平移1hour
@@ -441,7 +438,7 @@ public class TSBM {
         for (int cBatch = 1; cBatch <= batch; cBatch++) {
             long start = time + (cBatch - 1) * slipUnit;//1 hour
             long incre = 3600 * 1000;
-            long end = time + incre +  (cBatch - 1) * slipUnit;
+            long end = time + incre + (cBatch - 1) * slipUnit;
             long timeout = adapter.query1(start, end);
             sumTimeout1 += timeout;
             System.out.println("query 1." + cBatch + " finished " + timeout);
@@ -528,10 +525,9 @@ public class TSBM {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////输出结果
+    ///////////////////////////////////输出结果////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     private static void writeResult(String resultPath, String data) {
         FileUtils.writeLine(resultPath, data);
     }
-
-    //ExecutorService和CompletionService原理
 }
