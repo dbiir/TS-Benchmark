@@ -1,5 +1,6 @@
 cn/edu/ruc/InfluxdbAdapter.class
 cn/edu/ruc/DruidAdapter.class
+cn/edu/ruc/DruidUtils.class
 cn/edu/ruc/OpentsdbAdapter.class
 TSDBTest.class
 cn/edu/ruc/TimescaledbUtils.class

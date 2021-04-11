@@ -83,7 +83,7 @@ public class InfluxdbAdapter implements BaseAdapter {// ctrl+i 快速实现接�
     public long query3(long start, long end) {
         String sqlFormat = "select mean(value) from sensor where f='%s' and s='%s' and time>=%s and time<=%s group by " +
                 "f,d,s,time(1h)";
-        String eSql = String.format(sqlFormat, "f1","s1", TimeUnit.MILLISECONDS.toNanos(start),
+        String eSql = String.format(sqlFormat, "f1", "s1", TimeUnit.MILLISECONDS.toNanos(start),
                 TimeUnit.MILLISECONDS.toNanos(end));
         System.out.println(eSql);
         return execQuery(eSql);
@@ -108,7 +108,7 @@ public class InfluxdbAdapter implements BaseAdapter {// ctrl+i 快速实现接�
         String baseUrl = String.format("http://%s:%s", ip, port);
         this.writeURL = baseUrl + "/write?precision=ms&db=" + dbName;
         this.queryURL = baseUrl + "/query?db=" + dbName;
-        INFLUXDB = InfluxDBFactory.connect(baseUrl,new OkHttpClient().newBuilder()
+        INFLUXDB = InfluxDBFactory.connect(baseUrl, new OkHttpClient().newBuilder()
                 .readTimeout(50000, TimeUnit.MILLISECONDS)
                 .connectTimeout(50000, TimeUnit.MILLISECONDS)
                 .writeTimeout(50000, TimeUnit.MILLISECONDS));
