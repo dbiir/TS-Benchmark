@@ -6,8 +6,8 @@ echo $DATA_GEN_HOME
 echo "calc time now..."
 start=$(date +%s.%N); \
   if [ $DB_TEST_MODE -eq 1 ]; then 
-  	#influx -import -path=$DATA_GEN_HOME/influxdb.csv -precision=ms; \
-	echo $DATA_GEN_HOME/influxdb.csv
+  	influx -import -path=$DATA_GEN_HOME/influxdb.csv -precision=ms; \
+	echo $DATA_GEN_HOME/influxdb.csv has been imported
   else
         timescaledb-parallel-copy --db-name ruc_test --table sensor \
 	--file timescaledb.csv --workers 4 --copy-options "CSV";
