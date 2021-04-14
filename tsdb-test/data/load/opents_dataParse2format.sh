@@ -12,28 +12,28 @@ file="OpentsdbUtils.java"
 # 根据文件名来获取生成的class名称
 class=$(echo $file | awk -F '.' '{print $1}')
 echo "class= $class"
-echo "开始编译，请等待!!!"
+echo "building!"
 echo "------------------------------------"
  
 # 编译
 javac $file
  
 if [ $? -eq 0 ]; then
-    echo "编译成功, 准备运行，正将数据规格化成可导入的格式!!!"
+    echo "build success, prepare to run，formatting data into style which can be imported."
     echo "------------------------------------"
  
     # 运行
     java $class $BENCHMARK_HOME
     if [ $? -eq 0 ]; then
         echo "------------------------------------"
-        echo "运行完毕!!!"
+        echo "success!!!"
     else
         echo "------------------------------------"
-        echo "运行时出错!!!"
+        echo "running error!!!"
     fi
 else
     echo "------------------------------------"
-    echo "编译时出现错误!!!"
+    echo "build error!"
 fi
  
 # 防止影响后面的测试，运行完毕之后，可以将生成的class文件删除
