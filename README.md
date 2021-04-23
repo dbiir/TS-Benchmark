@@ -39,6 +39,7 @@ The configuration of TSDBs is shown as follows:
 
 #### More
 
-If you have interests in the directed graph construction and the generation via random walk. you can ref to  the ```random_walk.ipynb```
+If you have interests in the directed graph construction and the generation via random walk. you can ref to  the ```random_walk.ipynb``` [Quick Open It!](https://nbviewer.jupyter.org/github/dbiir/TS-Benchmark/blob/master/random_walk.ipynb)
 
 More information please ref to [for detail](./documents/时序评测工具使用手册.pdf)
+
