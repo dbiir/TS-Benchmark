@@ -1,8 +1,32 @@
-# TS-Benchmark
+# TS-Benchmark: A Benchmark for Time Series Databases
 
 #### Description
 
-This project is the source code of TS-Benchmark.
+This project is the source code of TS-Benchmark. Related work has been published in ICDE 2021.
+bibTex:
+```
+@inproceedings{DBLP:conf/icde/HaoQCLSTZD21,
+  author    = {Yuanzhe Hao and
+               Xiongpai Qin and
+               Yueguo Chen and
+               Yaru Li and
+               Xiaoguang Sun and
+               Yu Tao and
+               Xiao Zhang and
+               Xiaoyong Du},
+  title     = {TS-Benchmark: {A} Benchmark for Time Series Databases},
+  booktitle = {37th {IEEE} International Conference on Data Engineering, {ICDE} 2021,
+               Chania, Greece, April 19-22, 2021},
+  pages     = {588--599},
+  publisher = {{IEEE}},
+  year      = {2021},
+  url       = {https://doi.org/10.1109/ICDE51399.2021.00057},
+  doi       = {10.1109/ICDE51399.2021.00057},
+  timestamp = {Mon, 28 Jun 2021 10:16:44 +0200},
+  biburl    = {https://dblp.org/rec/conf/icde/HaoQCLSTZD21.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+```
 
 #### Start
 
@@ -42,9 +66,3 @@ The configuration of TSDBs is shown as follows:
 If you have interests in the directed graph construction and the generation via random walk. you can ref to  the ```random_walk.ipynb``` [Quick Open It!](https://nbviewer.jupyter.org/github/dbiir/TS-Benchmark/blob/master/random_walk.ipynb)
 
 More information please ref to [for detail](./documents/时序评测工具使用手册.pdf)
-
-
-
-Catalog/.properties
-
-读到host:d
