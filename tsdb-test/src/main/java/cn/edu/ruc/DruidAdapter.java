@@ -5,7 +5,8 @@ import cn.edu.ruc.start.TSBM;
 
 import com.alibaba.fastjson.JSON;
 import okhttp3.*;
-
+import java.sql.Date;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,7 @@ public class DruidAdapter implements BaseAdapter {
             long startTime1 = System.nanoTime();
             response = client.newCall(request).execute();
             int code = response.code();
+            System.out.println("code " + code +", "+ response.body().string());
             response.close();
             long endTime1 = System.nanoTime();
             costTime = endTime1 - startTime1;
@@ -55,7 +57,8 @@ public class DruidAdapter implements BaseAdapter {
         String[] rows = data.split(TSBM.LINE_SEPARATOR);
         StringBuilder sc = new StringBuilder();
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-
+        int turn = 0;
+        long costTime = 0L;
         for (String row : rows) {
             String[] sensors = row.split(TSBM.SEPARATOR);
             if (sensors.length < 3) {//过滤空行
@@ -66,34 +69,40 @@ public class DruidAdapter implements BaseAdapter {
             String farmId = sensors[1];
             String deviceId = sensors[2];
             int length = sensors.length;
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String time = df.format(new Date(Long.valueOf(timestamp)));
             for (int index = 3; index < length; index++) {
                 Map<String, Object> pointMap = new HashMap<>();
                 String value = sensors[index];
                 String sensorName = "s" + (index - 2);
-//	                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-//                    String tm = format.format(new Date(timestamp));
-                pointMap.put("time", timestamp);
+                pointMap.put("time", time);
                 pointMap.put("f", farmId);
                 pointMap.put("d", deviceId);
                 pointMap.put("s", sensorName);
-                pointMap.put("value", value);
+                pointMap.put("value", Double.valueOf(value));
                 list.add(pointMap);
             }
-
+            turn++;
+            if(turn == 10){
+                turn = 0;
+                String json = JSON.toJSONString(list);
+                //System.out.println(json);
+                Request request = null;
+                try {
+                    request = new Request.Builder()
+                            .url(writeURL)
+                            .post(RequestBody.create(MEDIA_TYPE_TEXT, json.toString().getBytes("UTF-8")))
+                            .build();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    break;
+                }
+                costTime += exeOkHttpRequest(request);
+                list.clear();
+            }
         }
-
-        String json = JSON.toJSONString(list);
-        Request request = null;
-        try {
-            request = new Request.Builder()
-                    .url(writeURL)
-                    .post(RequestBody.create(MEDIA_TYPE_TEXT, json.toString().getBytes("UTF-8")))
-                    .build();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return exeOkHttpRequest(request);
+        return costTime;
     }
 
     @Override

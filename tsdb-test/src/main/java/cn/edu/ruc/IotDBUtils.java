@@ -7,11 +7,11 @@ import java.sql.Statement;
 
 public class IotDBUtils {
     public static void main(String[] args) {
-        initTimeseries("10.77.110.226");
+        initTimeseries("192.168.151.51");
     }
 
     public static void initTimeseries(String ip) {
-        String driverClass = "cn.edu.tsinghua.iotdb.jdbc.TsfileDriver";
+        String driverClass = "org.apache.iotdb.jdbc.IoTDBDriver";
         try {
             Class.forName(driverClass);
         } catch (Exception e) {
@@ -20,7 +20,7 @@ public class IotDBUtils {
         String userName = "root";
         String passwd = "root";
         String rootSeries = "root.p";
-        String url = "jdbc:tsfile://" + ip + ":6667/";
+        String url = "jdbc:iotdb://" + ip + ":6667/";
 
         int farmNum = 64;
         int dNum = 300;
