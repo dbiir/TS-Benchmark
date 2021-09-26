@@ -25,6 +25,7 @@ public class TSBM {
     private static final int MAX_SENSOR = 50;
     private static final int SUM_FARM = 2;
     private static final long IMPORT_START = 1514736000000L;
+    private static BlockingQueue<String> queue = new LinkedBlockingQueue<String>(100);
 
     public static void main(String[] args) throws Exception {
     }
@@ -131,26 +132,12 @@ public class TSBM {
      * @param maxRows  每个farm对应的最大设备数
      */
     private static void generateDiskData(String basePath, int maxFarm, int maxRows) {
-        // 1 生成load数据 7天 2个风场 共100个设备，每个设备50个传感器的数据
-        long importStart = IMPORT_START;// 2018-01-01 00:00:00
-        long importEnd = IMPORT_START + 7 * 24 * 3600 * 1000;
-//        long importEnd = importStart + 24* 3600 * 1000;
-        for (long start = importStart; start <= importEnd; start += 70000) {
-            String path = basePath + "/load/load.data";
-            long end = importEnd < start + 70000 ? importEnd : start + 70000;
-            int sumFarm = SUM_FARM;// 历史数据风场数
-            for (int farmId = 1; farmId <= sumFarm; farmId++) {
-                FileUtils.writeLine(path, generateData(start, end, farmId, 50));
-//                FileUtils.writeLine(path, generateData(start, end, farmId, 50));
-            }
-
-        }
         generateInsertData(basePath, maxFarm, maxRows);
     }
 
     private static void generateInsertData(String basePath, int maxFarm, int maxRows) {
 
-        long importEnd = IMPORT_START + 7 * 24 * 3600 * 1000;
+        long importEnd = IMPORT_START + 12 * 3600 * 1000;
         // 2 生成 1/2/4/8/16/32/64 farm数据 每个farm50个device，每个10批次，一个批次一个文件
         int batchSum = 5;
         long insertStart = importEnd;
@@ -193,7 +180,6 @@ public class TSBM {
                 dBuffer.append("d" + rowIndex);
                 for (int sn = 1; sn <= sumSensor; sn++) {
                     dBuffer.append(SEPARATOR);
-//                    dBuffer.append(String.format("%.5f", RANDOM.nextDouble() * sn));
                     dBuffer.append(String.format("%.5f", ValueUtils.getValueByField((int) farmId, sn, start)));
                 }
                 dBuffer.append(LINE_SEPARATOR);
@@ -208,39 +194,88 @@ public class TSBM {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private static String importData(BaseAdapter adapter, String dataPath) {
-        String path = dataPath + "/load/load.data";
-        int cacheLine = 3000;
-        StringBuffer data = new StringBuffer();
-        try {
-            FileReader fr = new FileReader(path);
-            BufferedReader bf = new BufferedReader(fr);
-            String str = "";
-            int count = 1;
-            // 按行读取字符串
-            while ((str = bf.readLine()) != null) {
-                data.append(str);
-                data.append(System.getProperty("line.separator"));
-                if (count % cacheLine == 0) {//每1000条插入一次
-                    try {
-                        long timeout = adapter.insertData(data.toString());
-                        long pps = 0;
-                        if (timeout > 0) {
-                            pps = (cacheLine * 50 * 1000 / timeout);
+        long importStart = IMPORT_START;// 2018-01-01 00:00:00
+        long importEnd = IMPORT_START + 12 * 3600 * 1000;
+        final Boolean[] out = {false};
+        final long[] nums= {0L};
+        Thread th1 = new Thread() {
+            public void run() {
+                int count = 0;
+                long startTime = System.nanoTime();
+                for (long start = importStart; start <= importEnd; start += 7000) {
+                    long end = importEnd < start + 7000 ? importEnd : start + 7000;
+                    int sumFarm = SUM_FARM;// 历史数据风场数
+                    StringBuffer dataBuffer = new StringBuffer();
+                    for (int farmId = 1; farmId <= sumFarm; farmId++) {
+                        dataBuffer.append(generateData(start, end, farmId, 50));
+                        count++;
+                        if (count == 100) {
+                            try {
+                                queue.put(dataBuffer.toString());
+                            }catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
+                            dataBuffer.setLength(0);
+                            count = 0;
+                            nums[0] += 1;
+                            long endTime = System.nanoTime();
+                            long costTime = (endTime - startTime) / 1000000000;
+                            System.out.println("Insert Total " + nums[0] + "(25万点), Used Time :" + costTime + "s");
                         }
-                        System.out.println("import pps " + pps + " points/s");
-                    } catch (Exception e) {
+                    }
+                }
+                out[0] = true;
+            }
+        };
+
+        Thread th2 = new Thread() {
+            public void run() {
+                while (true) {
+                    if (out[0]) {
+                        break;
+                    }
+                    try {
+                        String data = queue.take();
+                        if (data == null) {
+                            Thread.sleep(100);
+                            continue;
+                        }
+                        adapter.insertData(data);
+                    }catch (InterruptedException e){
                         e.printStackTrace();
                     }
-                    data.setLength(0);
                 }
-                count++;
             }
-            if (data.length() != 0) {
-                adapter.insertData(data.toString());
+        };
+
+        Thread th3 = new Thread() {
+            public void run() {
+                while (true) {
+                    if (out[0]) {
+                        break;
+                    }
+                    try {
+                        String data = queue.take();
+                        if (data == null) {
+                            Thread.sleep(100);
+                            continue;
+                        }
+                        adapter.insertData(data);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }
             }
-            bf.close();
-            fr.close();
-        } catch (Exception e) {
+        };
+        try {
+            th1.start();
+            Thread.sleep(1000);
+            th2.start();
+            th3.start();
+            th1.join();
+            th2.join();
+            th3.join();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return "";

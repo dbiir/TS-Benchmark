@@ -11,11 +11,12 @@ import java.util.List;
  * iotdb test
  */
 public class IotdbAdapter implements BaseAdapter {
-    private String driverClass = "cn.edu.tsinghua.iotdb.jdbc.TsfileDriver";
-    private String userName = "";
-    private String passwd = "";
+    private String driverClass = "org.apache.iotdb.jdbc.IoTDBDriver";
+    private String userName = "root";
+    private String passwd = "root";
     private String rootSeries = "root.p";
     private String url = "";
+    private Connection connection;
 
     public void initConnect(String ip, String port, String user, String password) {
         try {
@@ -23,13 +24,16 @@ public class IotdbAdapter implements BaseAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.url = String.format("jdbc:tsfile://%s:%s/", ip, port);
+        this.url = String.format("jdbc:iotdb://%s:%s/", ip, port);
         this.userName = user;
         this.passwd = password;
+        connection = null;
     }
 
     private Connection getConnection() {
-        Connection connection = null;
+        if (connection != null) {
+            return connection;
+        }
         try {
             connection = DriverManager.getConnection(url, userName, passwd);
         } catch (SQLException e) {
@@ -62,6 +66,16 @@ public class IotdbAdapter implements BaseAdapter {
         String[] rows = data.split(TSBM.LINE_SEPARATOR);
         StringBuilder sc = new StringBuilder();
         List<String> sqls = new ArrayList<String>();
+        Long costTime = 0L;
+        Connection connection = getConnection();
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+        System.out.println("start insert " + rows.length * 50 + "Points");
         for (String row : rows) {
             String sqlFormat = "insert into %s.%s.%s(%s) values(%s)";
             String[] sensors = row.split(TSBM.SEPARATOR);
@@ -72,49 +86,36 @@ public class IotdbAdapter implements BaseAdapter {
             String farmId = sensors[1];
             String deviceId = sensors[2];
             int length = sensors.length;
-            StringBuffer tagBuffer = new StringBuffer();
-            StringBuffer valueBuffer = new StringBuffer();
-            tagBuffer.append("timestamp");
-            tagBuffer.append(",");
-            valueBuffer.append(timestamp);
-            valueBuffer.append(",");
-            for (int index = 3; index < length; index++) {
-                String value = sensors[index];
-                String sensorName = "s" + (index - 2);
-                tagBuffer.append(sensorName);
-                valueBuffer.append(value);
-                if (index != length - 1) {
+            try {
+                for (int index = 3; index < length; index++) {
+                    StringBuffer tagBuffer = new StringBuffer();
+                    StringBuffer valueBuffer = new StringBuffer();
+                    String value = sensors[index];
+                    String sensorName = "s" + (index - 2);
+                    tagBuffer.append("timestamp");
                     tagBuffer.append(",");
+                    tagBuffer.append(sensorName);
+                    valueBuffer.append(timestamp);
                     valueBuffer.append(",");
+                    valueBuffer.append(value);
+                    statement.addBatch(String.format(sqlFormat, rootSeries, farmId, deviceId, tagBuffer.toString(), valueBuffer.toString()));
                 }
+
+                long startTime = System.nanoTime();
+                statement.executeBatch();
+                long endTime = System.nanoTime();
+                costTime += (endTime - startTime) / 1000 / 1000;
+                statement.clearBatch();
+                sqls.clear();
+            } catch (Exception e) {
+                e.printStackTrace();
+                closeConnection(connection);
+                closeStatement(statement);
+                return -1;
             }
-            sqls.add(String.format(sqlFormat, rootSeries, farmId, deviceId, tagBuffer.toString(), valueBuffer.toString()));
         }
-        // 写入数据
-        Connection connection = getConnection();
-        Statement statement = null;
-        Long costTime = 0L;
-        try {
-            statement = connection.createStatement();
-            for (String sql : sqls) {
-                statement.addBatch(sql);
-            }
-            long startTime = System.nanoTime();
-            int[] ints = statement.executeBatch();
-            for (int i : ints) {
-                System.out.println(i);
-            }
-            long endTime = System.nanoTime();
-            costTime = endTime - startTime;
-            statement.clearBatch();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        } finally {
-            closeStatement(statement);
-            closeConnection(connection);
-        }
-        return costTime / 1000 / 1000;
+        closeStatement(statement);
+        return costTime;
     }
 
     public long query1(long start, long end) {
@@ -170,10 +171,10 @@ public class IotdbAdapter implements BaseAdapter {
             costTime = endTime - startTime;
         } catch (SQLException e) {
             e.printStackTrace();
+            closeConnection(conn);
             return -1;
         } finally {
             closeStatement(statement);
-            closeConnection(conn);
         }
         return costTime / 1000 / 1000;
     }
