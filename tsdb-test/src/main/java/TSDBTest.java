@@ -7,145 +7,141 @@ public class TSDBTest {
     private static String dataPath = "";
     public static Properties properties = null;
 
-    //"$DB_CODE" "${TEST_METHOD}" "${DATA_PATH}"
     public static void main(String[] args) throws Exception {
-//        properties = new Properties();
-//        try {
-//            FileInputStream in = new FileInputStream("dbInfoConfig.properties");
-//            properties.load(in);
-//        } catch (Exception e) {
-//            System.out.println(e.toString());
-//        }
+        properties = new Properties();
+        try {
+            FileInputStream in = new FileInputStream("dbInfoConfig.properties");
+            properties.load(in);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
 
-//        System.out.println(args[0]);
-//        System.out.println(args[1]);
-//        System.out.println(args[2]);
-//        dataPath = args[2];
-//        if ("1".equals(args[0])) {
-//            if ("1".equals(args[1])) {
-//                testInfluxdb(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testInfluxdb(false);
-//            }
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//        }
-//        if ("2".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testTimescaledb(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testTimescaledb(false);
-//            }
-//        }
-//        if ("3".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testIotdb(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testIotdb(false);
-//            }
-//        }
-//        if ("4".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testOpentsdb(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testOpentsdb(false);
-//            }
-//        }
-//        if ("5".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testDruid(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testDruid(false);
-//            }
-//        }
-//        if ("6".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testGaussDBForInfluxdb(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testGaussDBForInfluxdb(false);
-//            }
-//        }
-//
-//        if ("7".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testTDEngine(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testTDEngine(false);
-//            }
-//        }
-//        if ("8".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testAliHiTSDB(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testAliHiTSDB(false);
-//            }
-//        }
-//        if ("9".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testAliLindorm(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testAliLindorm(false);
-//            }
-//        }
-//        if ("10".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testAliInfluxDB(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testAliInfluxDB(false);
-//            }
-//        }
-//        if ("11".equals(args[0])) {
-//            if ("0".equals(args[1])) {
-//                TSBM.generateData(dataPath);
-//            }
-//            if ("1".equals(args[1])) {
-//                testKdbPlus(true);
-//            }
-//            if ("2".equals(args[1])) {
-//                testKdbPlus(false);
-//            }
-//        }
-        TSBM.startPerformTest("/Users/hsw/Desktop/JetBrains/IDEAproject/TS-Benchmark/test",
-                "cn.edu.ruc.KdbPlusAdapter","127.0.0.1","5001","",""
-        ,false,false);
+        System.out.println(args[0]);
+        System.out.println(args[1]);
+        System.out.println(args[2]);
+        dataPath = args[2];
+        if ("1".equals(args[0])) {
+            if ("1".equals(args[1])) {
+                testInfluxdb(true);
+            }
+            if ("2".equals(args[1])) {
+                testInfluxdb(false);
+            }
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+        }
+        if ("2".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testTimescaledb(true);
+            }
+            if ("2".equals(args[1])) {
+                testTimescaledb(false);
+            }
+        }
+        if ("3".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testIotdb(true);
+            }
+            if ("2".equals(args[1])) {
+                testIotdb(false);
+            }
+        }
+        if ("4".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testOpentsdb(true);
+            }
+            if ("2".equals(args[1])) {
+                testOpentsdb(false);
+            }
+        }
+        if ("5".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testDruid(true);
+            }
+            if ("2".equals(args[1])) {
+                testDruid(false);
+            }
+        }
+        if ("6".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testGaussDBForInfluxdb(true);
+            }
+            if ("2".equals(args[1])) {
+                testGaussDBForInfluxdb(false);
+            }
+        }
+
+        if ("7".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testTDEngine(true);
+            }
+            if ("2".equals(args[1])) {
+                testTDEngine(false);
+            }
+        }
+        if ("8".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testAliHiTSDB(true);
+            }
+            if ("2".equals(args[1])) {
+                testAliHiTSDB(false);
+            }
+        }
+        if ("9".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testAliLindorm(true);
+            }
+            if ("2".equals(args[1])) {
+                testAliLindorm(false);
+            }
+        }
+        if ("10".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testAliInfluxDB(true);
+            }
+            if ("2".equals(args[1])) {
+                testAliInfluxDB(false);
+            }
+        }
+        if ("11".equals(args[0])) {
+            if ("0".equals(args[1])) {
+                TSBM.generateData(dataPath);
+            }
+            if ("1".equals(args[1])) {
+                testKdbPlus(true);
+            }
+            if ("2".equals(args[1])) {
+                testKdbPlus(false);
+            }
+        }
     }
 
     private static void testKdbPlus(boolean loadParam) {
